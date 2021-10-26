@@ -1,7 +1,9 @@
-var _ = require('lodash');
-var express = require('express');
-var app = express();
-var yamahuda = [];
+const express = require('express');
+const app = express();
+const gameController = require('./gameController');
+const shuffle = require('./shuffle');
+const yamahuda = require('./yamahuda');
+const distribute = require('./distribute');
 var player_Number = 3;
 
 app.get('/', (req, res)=>{
@@ -9,35 +11,30 @@ app.get('/', (req, res)=>{
 });
 
 
-[...Array(13)].map((el,i)=>{
-    _.times(4,()=>{yamahuda.push(i+1)})
-});
-//1~54の数字を作っている
-yamahuda.push('Joker');
+app.use('/game', gameController);
 
 
-function shuffle(n){
-    var newArray = [];
-    while(n.length > 0){
-        var k = Math.floor(Math.random() * n.length);
-        newArray.push(n[k]);
-        n.splice(k, 1);
-    }
-    return newArray;
-}
+// [...Array(13)].map((el,i)=>{
+//     _.times(4,()=>{yamahuda.push(i+1)})
+// });
+// //1~54の数字を作っている
+// yamahuda.push('Joker');
+var shuffle_yamahuda = shuffle(yamahuda());
+console.log(shuffle_yamahuda);
+// var tehuda = {};
+// var player_Name = 'たろう';
+// tehuda[player_Name] = [];
 
-var shuffle_yamahuda = shuffle(yamahuda);
-var tehuda = {};
-var player_Name = 'たろう';
-tehuda[player_Name] = [];
+var distributed = distribute(shuffle_yamahuda);
+console.log(distributed);
+// var　maisuu = Math.floor(shuffle_yamahuda.length / player_Number);
+// for(var i = 0;i < maisuu; i++){
+//     tehuda[player_Name].push(shuffle_yamahuda[i]);
+//     shuffle_yamahuda.splice(i, 1);
+// }
+// console.log(tehuda);
+// console.log(maisuu);
 
-var　maisuu = Math.floor(shuffle_yamahuda.length / player_Number);
-for(var i = 0;i < maisuu; i++){
-    tehuda[player_Name].push(shuffle_yamahuda[i]);
-    shuffle_yamahuda.splice(i, 1);
-}
-console.log(tehuda[player_Name].length);
-console.log(maisuu);
 
 
 var server = app.listen(3000, ()=>{
