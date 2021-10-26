@@ -11,10 +11,11 @@ var router = express.Router();
 
 router.post('/', (req, res, next)=>{
     let tehuda = {};
-    let player_Name = req.body;
+    let player_Name = req.body.name;
     tehuda[player_Name] = [];
     res.send('あ');
     console.log(tehuda);
+    console.log(req.query.name)
     return tehuda;
 });
 

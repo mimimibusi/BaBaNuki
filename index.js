@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 const gameController = require('./gameController');
 const shuffle = require('./shuffle');
 const yamahuda = require('./yamahuda');
@@ -10,9 +11,9 @@ app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/home.html');
 });
 
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/game', gameController);
-
 
 // [...Array(13)].map((el,i)=>{
 //     _.times(4,()=>{yamahuda.push(i+1)})
