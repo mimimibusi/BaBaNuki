@@ -9,13 +9,12 @@ var express = require('express');
 var router = express.Router();
 
 
-router.post('/', (req, res, next)=>{
+router.post('/', (req, res)=>{
     let tehuda = {};
     let player_Name = req.body.name;
     tehuda[player_Name] = [];
-    res.send('あ');
+    res.send(tehuda);
     console.log(tehuda);
-    console.log(req.query.name)
     return tehuda;
 });
 
