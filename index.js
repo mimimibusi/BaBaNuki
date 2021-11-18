@@ -1,47 +1,41 @@
-import { createGame } from "./gameController";
-var _ = require("lodash");
-var express = require("express");
-var app = express();
-var yamahuda = [];
+const express = require("express");
+const app = express();
+const mysql = require("mysql");
+const bodyParser = require("body-parser");
+const gameController = require("./gameController");
+const shuffle = require("./shuffle");
+const yamahuda = require("./yamahuda");
+const distribute = require("./distribute");
 var player_Number = 3;
 
+// var mysql_setting = {
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'babanuki'
+// }
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/home.html");
 });
 
-//gameを作成する時のcontroller
-app.post("/game/", createGame);
+const createRoom = require("./createRoom");
+app.use("/createRoom", createRoom);
 
-[...Array(13)].map((el, i) => {
-  _.times(4, () => {
-    yamahuda.push(i + 1);
-  });
-});
-//1~54の数字を作っている
-yamahuda.push("Joker");
+const standByRoom = require("./standByRoom");
+app.use("/standByRoom", standByRoom);
 
-function shuffle(n) {
-  var newArray = [];
-  while (n.length > 0) {
-    var k = Math.floor(Math.random() * n.length);
-    newArray.push(n[k]);
-    n.splice(k, 1);
-  }
-  return newArray;
-}
+const start = require("./start");
+app.use("/start", start);
 
-var shuffle_yamahuda = shuffle(yamahuda);
-var tehuda = {};
-var player_Name = "たろう";
-tehuda[player_Name] = [];
+app.use("/game", gameController);
 
-var maisuu = Math.floor(shuffle_yamahuda.length / player_Number);
-for (var i = 0; i < maisuu; i++) {
-  tehuda[player_Name].push(shuffle_yamahuda[i]);
-  shuffle_yamahuda.splice(i, 1);
-}
-console.log(tehuda[player_Name].length);
-console.log(maisuu);
+var shuffle_yamahuda = shuffle(yamahuda());
+// console.log(shuffle_yamahuda);
+
+var distributed = distribute(shuffle_yamahuda);
+// console.log(distributed);
 
 var server = app.listen(3000, () => {
   console.log("Server is running!");
