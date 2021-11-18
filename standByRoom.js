@@ -9,14 +9,17 @@ const mysql_setting = {
     database: 'babanuki'
 } 
 
+
 router.get('/', (req, res)=>{
     let connection = mysql.createConnection(mysql_setting);
     connection.connect();
 
-    connection.query('SELECT * from standByRoom', (error, results, fields)=>{
+    connection.query('SELECT * from room', (error, results, fields)=>{
         if(error == null){
-            res.send(results);
-            console.log('a');
+            // for(let i = 0; i <= Object.keys(results).length; i++){
+                res.send(results[0].room_name);
+                // console.log(Object.keys(results).length)
+            // }
         }
     })
     connection.end();

@@ -11,13 +11,14 @@ var mysql_setting = {
 
 router.post('/', (req, res)=>{
     var roomName = req.body.room;
-    var data = {'name': roomName};
+    var host = req.body.player;
+    var data = {'room_name': roomName, 'player': host};
 
     var connection = mysql.createConnection(mysql_setting);
 
     connection.connect();
 
-    connection.query('insert into standByRoom set ?', data, (error, results, fields)=>{
+    connection.query('insert into room set ?', data, (error, results, fields)=>{
         res.redirect('/standByRoom');
     });
     connection.end();

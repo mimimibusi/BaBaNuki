@@ -8,12 +8,12 @@ const yamahuda = require('./yamahuda');
 const distribute = require('./distribute');
 var player_Number = 3;
 
-var mysql_setting = {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'babanuki'
-}
+// var mysql_setting = {
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'babanuki'
+// }
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.get('/', (req, res)=>{
@@ -34,10 +34,10 @@ app.use('/game', gameController);
 
 
 var shuffle_yamahuda = shuffle(yamahuda());
-console.log(shuffle_yamahuda);
+// console.log(shuffle_yamahuda);
 
 var distributed = distribute(shuffle_yamahuda);
-console.log(distributed);
+// console.log(distributed);
 
 
 var server = app.listen(3000, ()=>{
