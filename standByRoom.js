@@ -9,10 +9,29 @@ const mysql_setting = {
   database: "babanuki",
 };
 
-import { getAllRooms } from "./infrastructure/repositories/room";
+const knex = require('knex')({
+  dialect: 'mysql',
+  connection: {
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'babanuki'
+  }
+});
 
-router.get("/", (req, res) => {
-  const rooms = getAllRooms();
+const Bookshelf = require('bookshelf')(knex);
+var Player = Bookshelf.Model.extend({
+    tableName: 'players'
+});
+var Room = Bookshelf.Model.extend({
+    tableName: 'rooms'
+});
+
+router.get('/', (req, res)=>{
+  new Room().fetchAll().then((model)=>{
+    console.log(model.toArray());
+    res.send(model.toArray());
+  });
 });
 
 module.exports = router;
